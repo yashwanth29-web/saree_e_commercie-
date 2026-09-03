@@ -1,0 +1,222 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  role      String   @default("CUSTOMER") // CUSTOMER, ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  orders    Order[]
+  reviews   Review[]
+  wishlist  Wishlist?
+  cart      Cart?
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  image       String?
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products    Product[]
+}
+
+model Product {
+  id               String   @id @default(cuid())
+  name             String
+  slug             String   @unique
+  sku              String   @unique
+  description      String
+  shortDescription String?
+  price            Float
+  salePrice        Float?
+  fabric           String?
+  weave            String?
+  color            String?
+  occasion         String?
+  stock            Int      @default(0)
+  
+  featured         Boolean  @default(false)
+  newArrival       Boolean  @default(false)
+  bestseller       Boolean  @default(false)
+  active           Boolean  @default(true)
+  isDemo           Boolean  @default(false)
+  
+  categoryId       String
+  category         Category @relation(fields: [categoryId], references: [id])
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  images           ProductImage[]
+  orderItems       OrderItem[]
+  reviews          Review[]
+  inventory        Inventory?
+  cartItems        CartItem[]
+  wishlistItems    WishlistItem[]
+
+  @@index([slug])
+  @@index([sku])
+  @@index([categoryId])
+}
+
+model ProductImage {
+  id          String   @id @default(cuid())
+  url         String
+  altText     String?
+  sortOrder   Int      @default(0)
+  primary     Boolean  @default(false)
+  
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model Order {
+  id               String   @id @default(cuid())
+  orderNumber      String   @unique
+  
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id])
+  
+  subtotal         Float
+  shipping         Float
+  discount         Float    @default(0)
+  total            Float
+  
+  paymentStatus    String   @default("PENDING") // PENDING, PAID, FAILED, REFUNDED
+  orderStatus      String   @default("PLACED") // PLACED, CONFIRMED, PROCESSING, PACKED, SHIPPED, OUT_FOR_DELIVERY, DELIVERED, CANCELLED
+  
+  shippingAddress  String // Stored as JSON string or normalized in a separate model (keeping string for simplicity as per spec)
+  customerEmail    String
+  customerPhone    String
+  customerName     String
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  items            OrderItem[]
+  couponId         String?
+  coupon           Coupon?  @relation(fields: [couponId], references: [id])
+
+  @@index([orderNumber])
+  @@index([userId])
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  
+  quantity  Int
+  price     Float // price at the time of order
+  
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String?    @unique
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  items     CartItem[]
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+
+  @@index([cartId])
+  @@index([productId])
+}
+
+model Wishlist {
+  id        String         @id @default(cuid())
+  userId    String         @unique
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  items     WishlistItem[]
+}
+
+model WishlistItem {
+  id         String   @id @default(cuid())
+  wishlistId String
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@index([wishlistId])
+  @@index([productId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([userId])
+}
+
+model Inventory {
+  id        String   @id @default(cuid())
+  productId String   @unique
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  quantity  Int      @default(0)
+  reserved  Int      @default(0) // Items in carts or pending orders
+  
+  updatedAt DateTime @updatedAt
+}
+
+model Coupon {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  discount  Float // percentage or flat
+  type      String   @default("PERCENTAGE") // PERCENTAGE, FLAT
+  active    Boolean  @default(true)
+  expiresAt DateTime?
+  
+  orders    Order[]
+}
