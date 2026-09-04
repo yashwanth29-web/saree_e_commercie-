@@ -97,7 +97,7 @@ export default async function OrderConfirmationPage({
               </h2>
 
               <div className="divide-y divide-[#222222]/10">
-                {order.items.map((item) => (
+                {order.items.map((item: any) => (
                   <div key={item.id} className="py-4 flex items-center gap-4">
                     <div className="relative w-16 h-20 bg-[#EFE9DF] rounded-xs overflow-hidden flex-shrink-0 border border-[#222222]/10">
                       <ImageWithFallback
