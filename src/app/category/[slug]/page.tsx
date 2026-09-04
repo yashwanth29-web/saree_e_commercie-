@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Image from 'next/image';
@@ -6,23 +6,43 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
 
-const prisma = new PrismaClient();
-
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const category = await prisma.category.findUnique({
-    where: { slug: resolvedParams.slug },
-    include: {
-      products: {
-        include: {
-          images: true,
+  let category: any = null;
+
+  try {
+    category = await prisma.category.findUnique({
+      where: { slug: resolvedParams.slug },
+      include: {
+        products: {
+          include: {
+            images: true,
+          }
         }
       }
-    }
-  });
+    });
+  } catch (err) {
+    console.error("Prisma category query error:", err);
+  }
 
   if (!category) {
-    notFound();
+    const categoryFallbacks: Record<string, { name: string; description: string }> = {
+      cotton: { name: 'Cotton Sarees', description: 'Light, breathable pure cotton handwoven sarees crafted in Mangalagiri.' },
+      pattu: { name: 'Mangalagiri Pattu', description: 'Pure silk sarees with authentic Mangalagiri weave and zari border.' },
+      'dress-materials': { name: 'Dress Materials', description: 'Unstitched authentic handloom dress materials.' },
+    };
+
+    const fallback = categoryFallbacks[resolvedParams.slug];
+    if (fallback) {
+      category = {
+        name: fallback.name,
+        slug: resolvedParams.slug,
+        description: fallback.description,
+        products: [],
+      };
+    } else {
+      notFound();
+    }
   }
 
   return (

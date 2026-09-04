@@ -1,24 +1,31 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ShopCatalog from "@/components/shop/ShopCatalog";
 
-const prisma = new PrismaClient();
-
 export default async function ShopPage() {
-  const [products, categories] = await Promise.all([
-    prisma.product.findMany({
-      where: { active: true },
-      include: {
-        images: true,
-        category: true,
-      },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.category.findMany({
-      orderBy: { name: "asc" },
-    }),
-  ]);
+  let products: any[] = [];
+  let categories: any[] = [];
+
+  try {
+    const [pList, cList] = await Promise.all([
+      prisma.product.findMany({
+        where: { active: true },
+        include: {
+          images: true,
+          category: true,
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.category.findMany({
+        orderBy: { name: "asc" },
+      }),
+    ]);
+    products = pList;
+    categories = cList;
+  } catch (err) {
+    console.error("Shop page query error:", err);
+  }
 
   return (
     <main className="min-h-screen flex flex-col bg-[#F7F3ED]">

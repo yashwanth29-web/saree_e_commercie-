@@ -1,21 +1,24 @@
 import Link from "next/link";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import ImageWithFallback from "@/components/ui/ImageWithFallback";
 import { MessageCircle } from "lucide-react";
 
-const prisma = new PrismaClient();
-
 export default async function FeaturedProducts() {
   // Query real featured products from the database
-  let products = await prisma.product.findMany({
-    where: { active: true },
-    include: {
-      images: true,
-      category: true,
-    },
-    orderBy: { createdAt: "desc" },
-    take: 4,
-  });
+  let products: any[] = [];
+  try {
+    products = await prisma.product.findMany({
+      where: { active: true },
+      include: {
+        images: true,
+        category: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 4,
+    });
+  } catch (err) {
+    console.error("FeaturedProducts query error:", err);
+  }
 
   return (
     <section className="py-16 sm:py-24 bg-ivory">

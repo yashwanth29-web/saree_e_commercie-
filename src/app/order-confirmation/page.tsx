@@ -1,11 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { CheckCircle2, PackageCheck, Truck, ArrowRight, MessageCircle } from 'lucide-react';
-
-const prisma = new PrismaClient();
 
 export default async function OrderConfirmationPage({
   searchParams,
@@ -15,22 +13,26 @@ export default async function OrderConfirmationPage({
   const resolvedParams = await searchParams;
   const orderNumber = resolvedParams?.orderNumber;
 
-  let order = null;
+  let order: any = null;
   if (orderNumber) {
-    order = await prisma.order.findUnique({
-      where: { orderNumber },
-      include: {
-        items: {
-          include: {
-            product: {
-              include: {
-                images: true,
+    try {
+      order = await prisma.order.findUnique({
+        where: { orderNumber },
+        include: {
+          items: {
+            include: {
+              product: {
+                include: {
+                  images: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
+    } catch (err) {
+      console.error("Order confirmation query error:", err);
+    }
   }
 
   // Parse shipping address if stored as JSON

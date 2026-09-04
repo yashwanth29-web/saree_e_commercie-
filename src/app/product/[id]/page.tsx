@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Image from 'next/image';
@@ -6,43 +6,46 @@ import { notFound } from 'next/navigation';
 import ProductActions from '@/components/product/ProductActions';
 import ProductImageGallery from '@/components/product/ProductImageGallery';
 
-const prisma = new PrismaClient();
-
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   const targetId = resolvedParams.id;
+  let product: any = null;
 
-  // 1. Try finding by ID, Slug, or SKU
-  let product = await prisma.product.findFirst({
-    where: {
-      OR: [
-        { id: targetId },
-        { slug: targetId },
-        { sku: targetId },
-      ],
-    },
-    include: {
-      images: true,
-      category: true,
-    }
-  });
-
-  // 2. Fallback for legacy homepage demo links (e.g. DL-101, DL-102, DL-103, DL-104)
-  if (!product) {
-    const allProducts = await prisma.product.findMany({
+  try {
+    // 1. Try finding by ID, Slug, or SKU
+    product = await prisma.product.findFirst({
+      where: {
+        OR: [
+          { id: targetId },
+          { slug: targetId },
+          { sku: targetId },
+        ],
+      },
       include: {
         images: true,
         category: true,
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 6,
+      }
     });
 
-    if (targetId === "DL-101" && allProducts[0]) product = allProducts[0];
-    else if (targetId === "DL-102" && allProducts[1]) product = allProducts[1];
-    else if (targetId === "DL-103" && allProducts[2]) product = allProducts[2];
-    else if (targetId === "DL-104" && allProducts[3]) product = allProducts[3];
-    else if (allProducts.length > 0) product = allProducts[0];
+    // 2. Fallback for legacy homepage demo links (e.g. DL-101, DL-102, DL-103, DL-104)
+    if (!product) {
+      const allProducts = await prisma.product.findMany({
+        include: {
+          images: true,
+          category: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 6,
+      });
+
+      if (targetId === "DL-101" && allProducts[0]) product = allProducts[0];
+      else if (targetId === "DL-102" && allProducts[1]) product = allProducts[1];
+      else if (targetId === "DL-103" && allProducts[2]) product = allProducts[2];
+      else if (targetId === "DL-104" && allProducts[3]) product = allProducts[3];
+      else if (allProducts.length > 0) product = allProducts[0];
+    }
+  } catch (err) {
+    console.error("Product page query error:", err);
   }
 
   if (!product) {

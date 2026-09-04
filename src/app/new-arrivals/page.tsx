@@ -1,19 +1,22 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
 
-const prisma = new PrismaClient();
-
 export default async function NewArrivalsPage() {
-  const products = await prisma.product.findMany({
-    where: { newArrival: true },
-    include: {
-      images: true,
-    }
-  });
+  let products: any[] = [];
+  try {
+    products = await prisma.product.findMany({
+      where: { newArrival: true },
+      include: {
+        images: true,
+      }
+    });
+  } catch (err) {
+    console.error("New arrivals query error:", err);
+  }
 
   return (
     <main className="min-h-screen flex flex-col bg-cream">
