@@ -91,6 +91,9 @@ export default function Navbar() {
             <Link href="/about" className="hover:text-[#7A211B] transition-colors py-2 px-1">
               ABOUT
             </Link>
+            <Link href="/track-order" className="text-[#7A211B] hover:text-[#8D2720] transition-colors py-2 px-1 font-bold">
+              TRACK ORDER
+            </Link>
           </nav>
 
           {/* Action Icons (44px min touch target on mobile) */}
@@ -275,6 +278,22 @@ export default function Navbar() {
                 className="pt-4 hover:text-[#7A211B] flex items-center justify-between"
               >
                 <span>OUR WEAVING STORY</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#222222]/30" />
+              </Link>
+              <Link
+                href="/track-order"
+                onClick={() => setMobileMenuOpen(false)}
+                className="pt-4 text-[#7A211B] font-bold flex items-center justify-between"
+              >
+                <span>TRACK YOUR ORDER</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#7A211B]" />
+              </Link>
+              <Link
+                href="/admin/orders"
+                onClick={() => setMobileMenuOpen(false)}
+                className="pt-4 text-[#222222]/50 hover:text-[#7A211B] flex items-center justify-between text-[11px]"
+              >
+                <span>OWNER DASHBOARD</span>
                 <ArrowRight className="w-3.5 h-3.5 text-[#222222]/30" />
               </Link>
             </div>

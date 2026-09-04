@@ -80,11 +80,13 @@ export default function Footer() {
               Customer Support
             </h3>
             <ul className="space-y-2.5 font-sans text-xs text-white/70">
+              <li><Link href="/track-order" className="hover:text-white transition-colors font-semibold text-[#B79555]">Track Your Order</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Our Looms</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><Link href="/shipping" className="hover:text-white transition-colors">Loom Direct Shipping</Link></li>
               <li><Link href="/returns" className="hover:text-white transition-colors">Returns &amp; Exchange</Link></li>
               <li><Link href="/wishlist" className="hover:text-white transition-colors">Saved Wishlist</Link></li>
+              <li><Link href="/admin/orders" className="hover:text-[#B79555] transition-colors text-[11px] text-white/40">Owner Dashboard</Link></li>
             </ul>
           </div>
 
@@ -141,11 +143,13 @@ export default function Footer() {
             </button>
             {openSection === "support" && (
               <ul className="pb-4 space-y-3 font-sans text-xs text-white/70 pl-2">
+                <li><Link href="/track-order" className="hover:text-white block py-1 font-semibold text-[#B79555]">Track Your Order</Link></li>
                 <li><Link href="/about" className="hover:text-white block py-1">About Our Looms</Link></li>
                 <li><Link href="/contact" className="hover:text-white block py-1">Contact Us</Link></li>
                 <li><Link href="/shipping" className="hover:text-white block py-1">Shipping &amp; Delivery</Link></li>
                 <li><Link href="/returns" className="hover:text-white block py-1">Returns &amp; Exchange</Link></li>
                 <li><Link href="/wishlist" className="hover:text-white block py-1">My Wishlist</Link></li>
+                <li><Link href="/admin/orders" className="hover:text-[#B79555] block py-1 text-white/40 text-[11px]">Owner Dashboard</Link></li>
               </ul>
             )}
           </div>
