@@ -191,9 +191,9 @@ export default function CheckoutPage() {
 
         {/* Centered DL Handlooms logo with isolated pointer events */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <Link href="/" className="pointer-events-auto">
+          <div className="pointer-events-auto">
             <UshaLogo variant="dark" size="md" />
-          </Link>
+          </div>
         </div>
 
         {/* Right balance placeholder */}
