@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
-import { Search, Heart, ShoppingBag, User, Menu, X, Phone, ArrowRight } from "lucide-react";
+import { Search, ShoppingBag, Menu, X, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useCartStore } from "@/store/cartStore";
-import { useWishlistStore } from "@/store/wishlistStore";
+import UshaLogo from "@/components/ui/UshaLogo";
 
 export default function Navbar() {
   const [mounted, setMounted] = useState(false);
@@ -14,7 +13,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const totalCartItems = useCartStore((state) => state.getTotalItems());
-  const totalWishlistItems = useWishlistStore((state) => state.getTotalItems());
+  const setCartDrawerOpen = useCartStore((state) => state.setIsOpen);
 
   useEffect(() => {
     setMounted(true);
@@ -32,7 +31,7 @@ export default function Navbar() {
     };
   }, [mobileMenuOpen]);
 
-  // Keyboard Escape to close mobile menu
+  // Keyboard Escape to close mobile menu & search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -46,123 +45,57 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-[#F7F3ED]/95 backdrop-blur-md border-b border-[#222222]/10 transition-all duration-200">
-        <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 lg:h-20 flex items-center justify-between gap-3 sm:gap-6">
+      {/* Top Header - Forest Green */}
+      <header className="sticky top-0 z-40 bg-[#0B281B] text-white border-b border-white/10 transition-all duration-200">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-15 lg:h-18 flex items-center justify-between gap-4">
           
-          {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 group py-1 pr-1 sm:pr-4">
-            <div className="relative w-9 h-9 sm:w-11 sm:h-11 overflow-hidden rounded-sm transition-transform duration-300 group-hover:scale-105">
-              <Image
-                src="/logo.jpg"
-                alt="DL Handlooms"
-                fill
-                sizes="44px"
-                className="object-contain"
-                priority
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-serif text-sm sm:text-base lg:text-lg font-bold tracking-wider text-[#7A211B] leading-tight">
-                DL HANDLOOMS
-              </span>
-              <span className="text-[8px] sm:text-[9px] font-sans tracking-[0.2em] text-[#222222]/60 uppercase">
-                Mangalagiri &bull; Pure Weave
-              </span>
-            </div>
-          </Link>
+          {/* Mobile Hamburger Menu Toggle (Left) */}
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 text-white transition-colors"
+            aria-label="Open navigation menu"
+          >
+            <Menu className="w-6 h-6 stroke-[2]" />
+          </button>
 
-          {/* Desktop Navigation Links - Centered with Breathing Room */}
-          <nav className="hidden lg:flex items-center justify-center gap-5 xl:gap-7 font-sans text-xs tracking-[0.14em] font-semibold text-[#222222]/85 whitespace-nowrap">
-            <Link href="/" className="hover:text-[#7A211B] transition-colors py-2 px-1">
-              HOME
-            </Link>
-            <Link href="/shop" className="hover:text-[#7A211B] transition-colors py-2 px-1">
-              SHOP ALL
-            </Link>
-            <Link href="/category/pattu" className="hover:text-[#7A211B] transition-colors py-2 px-1">
-              MANGALAGIRI PATTU
-            </Link>
-            <Link href="/category/cotton" className="hover:text-[#7A211B] transition-colors py-2 px-1">
-              COTTON SAREES
-            </Link>
-            <Link href="/category/dress-materials" className="hover:text-[#7A211B] transition-colors py-2 px-1">
-              DRESS MATERIALS
-            </Link>
-            <Link href="/about" className="hover:text-[#7A211B] transition-colors py-2 px-1">
-              ABOUT
-            </Link>
-            <Link href="/track-order" className="text-[#7A211B] hover:text-[#8D2720] transition-colors py-2 px-1 font-bold">
-              TRACK ORDER
-            </Link>
-          </nav>
+          {/* Centered Usha Designers Logo */}
+          <div className="flex-1 flex justify-center">
+            <UshaLogo variant="light" size="md" />
+          </div>
 
-          {/* Action Icons (44px min touch target on mobile) */}
-          <div className="flex items-center gap-0.5 sm:gap-2 text-[#222222]">
-            
+          {/* Action Icons (Right): Search & Cart */}
+          <div className="flex items-center gap-1 sm:gap-2 text-white">
             {/* Search Toggle */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full hover:bg-[#222222]/5 text-[#222222] hover:text-[#7A211B] transition-colors relative"
+              className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 text-white transition-colors"
               aria-label="Search products"
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-5 h-5 stroke-[2]" />
             </button>
 
-            {/* Account (Desktop/Tablet) */}
-            <Link
-              href="/account"
-              className="hidden md:flex w-10 h-10 sm:w-11 sm:h-11 items-center justify-center rounded-full hover:bg-[#222222]/5 text-[#222222] hover:text-[#7A211B] transition-colors"
-              aria-label="My Account"
-            >
-              <User className="w-5 h-5" />
-            </Link>
-
-            {/* Wishlist */}
-            <Link
-              href="/wishlist"
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full hover:bg-[#222222]/5 text-[#222222] hover:text-[#7A211B] transition-colors relative"
-              aria-label="View Wishlist"
-            >
-              <Heart className="w-5 h-5" />
-              {mounted && totalWishlistItems > 0 && (
-                <span className="absolute top-1.5 right-1.5 bg-[#7A211B] text-[#F7F3ED] text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
-                  {totalWishlistItems}
-                </span>
-              )}
-            </Link>
-
-            {/* Cart */}
-            <Link
-              href="/cart"
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full hover:bg-[#222222]/5 text-[#222222] hover:text-[#7A211B] transition-colors relative"
+            {/* Cart Drawer Trigger */}
+            <button
+              onClick={() => setCartDrawerOpen(true)}
+              className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 text-white transition-colors relative"
               aria-label="View Shopping Cart"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingBag className="w-5 h-5 stroke-[2]" />
               {mounted && totalCartItems > 0 && (
-                <span className="absolute top-1.5 right-1.5 bg-[#7A211B] text-[#F7F3ED] text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+                <span className="absolute top-1 right-1 bg-white text-[#0B281B] text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                   {totalCartItems}
                 </span>
               )}
-            </Link>
-
-            {/* Mobile Hamburger Menu Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full hover:bg-[#222222]/5 text-[#222222] hover:text-[#7A211B] transition-colors"
-              aria-label="Open navigation menu"
-            >
-              <Menu className="w-6 h-6" />
             </button>
-
           </div>
 
         </div>
 
         {/* Expandable Search Bar */}
         {searchOpen && (
-          <div className="border-t border-[#222222]/10 bg-[#F7F3ED] px-6 py-3 transition-all">
+          <div className="border-t border-white/15 bg-[#061910] px-4 py-3 transition-all">
             <div className="container mx-auto max-w-2xl flex items-center gap-3">
-              <Search className="w-4 h-4 text-[#222222]/50 flex-shrink-0" />
+              <Search className="w-4 h-4 text-white/60 flex-shrink-0" />
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -176,14 +109,14 @@ export default function Navbar() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search pure pattu sarees, cotton, dress materials..."
-                  className="w-full bg-transparent border-none text-sm font-sans text-[#222222] focus:outline-none placeholder-[#222222]/40"
+                  placeholder="Search sarees, dresses, jewellery..."
+                  className="w-full bg-transparent border-none text-sm font-sans text-white focus:outline-hidden placeholder-white/50"
                   autoFocus
                 />
               </form>
               <button
                 onClick={() => setSearchOpen(false)}
-                className="text-xs font-sans uppercase tracking-widest text-[#222222]/50 hover:text-[#7A211B]"
+                className="text-xs font-sans uppercase tracking-widest text-white/60 hover:text-white"
                 aria-label="Close search"
               >
                 Close
@@ -193,131 +126,111 @@ export default function Navbar() {
         )}
       </header>
 
-      {/* Mobile Drawer Menu */}
+      {/* Side Navbar / Mobile Drawer (Strictly: Home, Shop, Account, Help, Logout) */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
+        <div className="fixed inset-0 z-50 flex">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
             onClick={() => setMobileMenuOpen(false)}
           />
 
-          {/* Drawer Content */}
-          <div className="relative ml-auto w-full max-w-xs sm:max-w-sm bg-[#F7F3ED] h-full shadow-2xl flex flex-col z-10 overflow-y-auto">
+          {/* Drawer Content - Forest Green */}
+          <div className="relative mr-auto w-[82%] max-w-xs sm:max-w-sm bg-[#0B281B] text-white h-full shadow-2xl flex flex-col z-10 overflow-y-auto animate-in slide-in-from-left duration-250">
             
-            {/* Drawer Header */}
-            <div className="p-5 flex items-center justify-between border-b border-[#222222]/10">
-              <div className="flex items-center gap-2">
-                <div className="relative w-8 h-8 rounded-sm overflow-hidden">
-                  <Image
-                    src="/logo.jpg"
-                    alt="DL Handlooms"
-                    fill
-                    sizes="32px"
-                    className="object-contain"
-                  />
-                </div>
-                <span className="font-serif text-sm font-bold text-[#7A211B] tracking-wider">
-                  DL HANDLOOMS
-                </span>
-              </div>
+            {/* Drawer Top Bar */}
+            <div className="p-4 flex items-center justify-between border-b border-white/10">
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-1 text-[#222222]/60 hover:text-[#7A211B]"
+                className="p-1 rounded-full text-white/80 hover:text-white"
                 aria-label="Close menu"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6 stroke-[2.2]" />
               </button>
+              
+              <UshaLogo variant="light" size="sm" />
+
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setSearchOpen(true);
+                  }}
+                  className="p-2 text-white/80 hover:text-white"
+                  aria-label="Search"
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setCartDrawerOpen(true);
+                  }}
+                  className="p-2 text-white/80 hover:text-white"
+                  aria-label="Cart"
+                >
+                  <ShoppingBag className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            {/* Navigation Links */}
-            <div className="p-6 flex flex-col gap-4 font-sans text-xs tracking-[0.2em] font-semibold text-[#222222]/85 divide-y divide-[#222222]/5">
+            {/* Navigation Links: Strictly Home, Shop, Account, Help */}
+            <div className="p-6 flex flex-col gap-6 text-base font-sans font-medium">
               <Link
                 href="/"
+                prefetch={true}
                 onClick={() => setMobileMenuOpen(false)}
-                className="pt-2 hover:text-[#7A211B] flex items-center justify-between"
+                className="hover:text-[#C4E2D3] transition-colors py-1 active:translate-x-1 duration-100"
               >
-                <span>HOME</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#222222]/30" />
+                Home
               </Link>
               <Link
                 href="/shop"
+                prefetch={true}
                 onClick={() => setMobileMenuOpen(false)}
-                className="pt-4 hover:text-[#7A211B] flex items-center justify-between"
+                className="hover:text-[#C4E2D3] transition-colors py-1 active:translate-x-1 duration-100"
               >
-                <span>SHOP ALL SAREES</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#222222]/30" />
+                Shop
               </Link>
               <Link
-                href="/category/pattu"
+                href="/account"
+                prefetch={true}
                 onClick={() => setMobileMenuOpen(false)}
-                className="pt-4 hover:text-[#7A211B] flex items-center justify-between"
+                className="hover:text-[#C4E2D3] transition-colors py-1 active:translate-x-1 duration-100"
               >
-                <span>MANGALAGIRI PATTU</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#222222]/30" />
+                Account
               </Link>
               <Link
-                href="/category/cotton"
+                href="/contact"
+                prefetch={true}
                 onClick={() => setMobileMenuOpen(false)}
-                className="pt-4 hover:text-[#7A211B] flex items-center justify-between"
+                className="hover:text-[#C4E2D3] transition-colors py-1 active:translate-x-1 duration-100"
               >
-                <span>COTTON SAREES</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#222222]/30" />
-              </Link>
-              <Link
-                href="/category/dress-materials"
-                onClick={() => setMobileMenuOpen(false)}
-                className="pt-4 hover:text-[#7A211B] flex items-center justify-between"
-              >
-                <span>DRESS MATERIALS</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#222222]/30" />
-              </Link>
-              <Link
-                href="/about"
-                onClick={() => setMobileMenuOpen(false)}
-                className="pt-4 hover:text-[#7A211B] flex items-center justify-between"
-              >
-                <span>OUR WEAVING STORY</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#222222]/30" />
-              </Link>
-              <Link
-                href="/track-order"
-                onClick={() => setMobileMenuOpen(false)}
-                className="pt-4 text-[#7A211B] font-bold flex items-center justify-between"
-              >
-                <span>TRACK YOUR ORDER</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#7A211B]" />
-              </Link>
-              <Link
-                href="/admin/orders"
-                onClick={() => setMobileMenuOpen(false)}
-                className="pt-4 text-[#222222]/50 hover:text-[#7A211B] flex items-center justify-between text-[11px]"
-              >
-                <span>OWNER DASHBOARD</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#222222]/30" />
+                Help
               </Link>
             </div>
 
-            {/* Quick Actions */}
-            <div className="p-6 mt-auto bg-[#EFE9DF]/50 border-t border-[#222222]/10 space-y-3">
-              <Link
-                href="/cart"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 bg-[#7A211B] text-[#F7F3ED] flex items-center justify-center gap-2 text-xs font-sans tracking-widest uppercase font-semibold rounded-sm shadow-sm"
+            {/* Bottom Section: My Account & Log Out button */}
+            <div className="mt-auto p-6 border-t border-white/10 space-y-4">
+              <div className="text-lg font-serif font-bold text-white">
+                My Account
+              </div>
+
+              <div className="flex items-center gap-2 text-white/90">
+                <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center">
+                  <User className="w-4 h-4 text-white" />
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  window.location.href = "/account";
+                }}
+                className="w-full py-2.5 border border-white/60 hover:border-white text-white text-sm font-sans font-semibold rounded-xs transition-colors text-center"
               >
-                <ShoppingBag className="w-4 h-4" />
-                <span>View Cart ({mounted ? totalCartItems : 0})</span>
-              </Link>
-              
-              <a
-                href="https://wa.me/919666228380?text=Namaste%20DL%20Handlooms,%20I%20have%20an%20inquiry%20about%20your%20sarees"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3 border border-[#1F7A4C]/30 text-[#1F7A4C] hover:bg-[#1F7A4C]/10 flex items-center justify-center gap-2 text-xs font-sans tracking-widest uppercase font-semibold rounded-sm transition-colors"
-              >
-                <Phone className="w-4 h-4" />
-                <span>Loom WhatsApp Help</span>
-              </a>
+                Log Out
+              </button>
             </div>
 
           </div>

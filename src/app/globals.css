@@ -1,31 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #F7F3ED;
-  --color-ivory: #F7F3ED;
-  --color-maroon: #7A211B;
-  --color-deep-red: #7A211B;
-  --color-wine: #5E1914;
+  --color-forest: #0B281B;
+  --color-forest-dark: #061910;
+  --color-forest-light: #163C2A;
+  --color-mint-light: #EAF5F1;
+  --color-mint: #C4E2D3;
+  --color-mint-dark: #82B89D;
+  --color-cream: #FAFAF8;
+  --color-charcoal: #1C2621;
+  --color-gray-soft: #F3F4F3;
+  --color-border-soft: #E2E8E4;
+
   --color-gold: #B79555;
   --color-gold-muted: #9E7D3B;
-  --color-green: #1F7A4C;
-  --color-charcoal: #222222;
-  --color-dark: #1A1A1A;
-  --color-textile-sand: #D5C7B2;
 
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    @apply bg-cream text-charcoal font-sans antialiased;
     background-color: var(--color-cream);
     color: var(--color-charcoal);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  button, a {
+    touch-action: manipulation;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif text-charcoal tracking-tight;
+    @apply font-serif text-[#0B281B] tracking-tight;
   }
 }
 
@@ -35,10 +47,16 @@
     text-wrap: balance;
   }
   .gold-divider {
-    @apply h-[1px] w-full bg-gradient-to-r from-transparent via-gold to-transparent opacity-50;
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(to right, transparent, #B79555, transparent);
+    opacity: 0.5;
   }
   .gold-text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-gold to-[#E2C37B];
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, #B79555, #E2C37B);
   }
 
   /* Safe Area Inset Support */
@@ -65,3 +83,17 @@
     font-size: 16px !important;
   }
 }
+
+/* Hide Next.js dev indicator badge, route info, and dev overlays */
+nextjs-portal,
+[data-nextjs-dev-tools-button],
+[data-nextjs-toast],
+[data-nextjs-route-announcer],
+div[data-nextjs-indicator],
+#__next-build-watcher {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+

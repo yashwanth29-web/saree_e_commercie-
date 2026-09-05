@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  devIndicators: false,
   outputFileTracingIncludes: {
     '/**': ['./prisma/dev.db'],
   },
