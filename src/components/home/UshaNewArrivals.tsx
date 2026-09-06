@@ -32,10 +32,10 @@ export default function UshaNewArrivals({ products }: UshaNewArrivalsProps) {
         },
         {
           id: "na-4",
-          name: "100s Count Pure Cotton Saree - Forest Green Floral",
+          name: "100s Count Pure Cotton Saree - Mint Green Floral",
           price: 1450,
-          image: "/products/mangalagiri-cotton-green-floral.jpg",
-          slug: "mangalagiri-cotton-green-floral",
+          image: "/products/mangalagiri-cotton-mint-floral.jpg",
+          slug: "mangalagiri-cotton-mint-floral",
         },
       ];
 

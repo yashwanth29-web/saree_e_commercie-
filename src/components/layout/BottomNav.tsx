@@ -49,7 +49,7 @@ export default function BottomNav() {
             <Link
               key={item.label}
               href={item.href}
-              prefetch={true}
+              prefetch={false}
               className={`flex flex-col items-center justify-center py-1 transition-colors active:scale-95 duration-100 ${
                 active ? "text-[#0B281B] font-bold" : "text-[#1C2621]/70 hover:text-[#0B281B]"
               }`}

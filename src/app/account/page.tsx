@@ -151,12 +151,18 @@ export default function AccountPage() {
               </div>
             </div>
 
-            <div className="pt-2">
+            <div className="pt-2 flex items-center gap-3 flex-wrap">
               <Link
                 href="/account#addresses"
                 className="inline-block px-5 py-2.5 rounded-xs bg-[#0B281B] hover:bg-[#163C2A] text-white text-xs font-sans font-semibold tracking-wider transition-colors shadow-xs"
               >
                 View Addresses (0)
+              </Link>
+              <Link
+                href="/owner"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xs bg-[#EAF5F1] hover:bg-[#D5EDE3] text-[#0B281B] border border-[#C4E2D3] text-xs font-sans font-bold tracking-wider transition-colors"
+              >
+                <span>Store Owner Hub &rarr;</span>
               </Link>
             </div>
           </div>

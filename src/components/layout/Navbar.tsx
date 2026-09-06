@@ -178,7 +178,7 @@ export default function Navbar() {
             <div className="p-6 flex flex-col gap-6 text-base font-sans font-medium">
               <Link
                 href="/"
-                prefetch={true}
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className="hover:text-[#C4E2D3] transition-colors py-1 active:translate-x-1 duration-100"
               >
@@ -186,7 +186,7 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/shop"
-                prefetch={true}
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className="hover:text-[#C4E2D3] transition-colors py-1 active:translate-x-1 duration-100"
               >
@@ -194,7 +194,7 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/account"
-                prefetch={true}
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className="hover:text-[#C4E2D3] transition-colors py-1 active:translate-x-1 duration-100"
               >
@@ -202,7 +202,7 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/contact"
-                prefetch={true}
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className="hover:text-[#C4E2D3] transition-colors py-1 active:translate-x-1 duration-100"
               >

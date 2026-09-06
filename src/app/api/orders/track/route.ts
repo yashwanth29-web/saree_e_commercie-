@@ -24,7 +24,7 @@ const DEMO_ORDERS: Record<string, any> = {
     courierName: 'India Post Speed Post',
     trackingNumber: 'IN-POST-4491028',
     items: [
-      { name: 'Mangalagiri Pattu Saree - Deep Crimson Wedding Edition', quantity: 1, price: 4499, image: '/products/mangalagiri-pattu-maroon-01.svg' }
+      { name: 'Mangalagiri Pattu Saree - Deep Crimson Wedding Edition', quantity: 1, price: 4499, image: '/products/mangalagiri-cotton-maroon-01.svg' }
     ]
   },
   'DL-942813': {

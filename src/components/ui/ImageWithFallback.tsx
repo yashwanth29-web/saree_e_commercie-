@@ -23,7 +23,7 @@ export default function ImageWithFallback({
   const imageSource = (!src || error) ? fallbackSrc : src;
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div className={`relative ${props.fill ? "w-full h-full" : ""} overflow-hidden`}>
       {loading && (
         <div className="absolute inset-0 bg-[#EFE9DF] animate-pulse z-0" />
       )}
@@ -32,7 +32,7 @@ export default function ImageWithFallback({
         src={imageSource}
         alt={alt || "Mangalagiri Handloom Saree"}
         sizes={sizes || "(max-width: 768px) 100vw, 33vw"}
-        className={`object-cover object-center transition-opacity duration-300 ${
+        className={`object-cover object-center transition-opacity duration-200 ${className} ${
           loading ? "opacity-0" : "opacity-100"
         }`}
         onLoad={() => setLoading(false)}

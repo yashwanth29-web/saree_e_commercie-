@@ -65,7 +65,7 @@ const DEMO_ORDERS = [
           name: 'Mangalagiri Pattu Saree - Deep Crimson Wedding Edition',
           sku: 'DL-PAT-002',
           fabric: 'Pure Silk (Pattu)',
-          images: [{ url: '/products/mangalagiri-pattu-maroon-01.svg' }]
+          images: [{ url: '/products/mangalagiri-cotton-maroon-01.svg' }]
         }
       }
     ]

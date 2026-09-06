@@ -87,6 +87,7 @@ export default function Footer() {
                   <li><Link href="/track-order" className="hover:text-white">Track Order</Link></li>
                   <li><Link href="/shipping" className="hover:text-white">Loom Direct Shipping</Link></li>
                   <li><Link href="/returns" className="hover:text-white">Returns &amp; Exchange</Link></li>
+                  <li><Link href="/owner" className="hover:text-white text-[#C4E2D3] font-medium">Owner Portal (Store Admin)</Link></li>
                 </ul>
               )}
             </div>

@@ -54,14 +54,13 @@ export default function ProductCardOverlay({
     <div className="group flex flex-col w-full">
       {/* Product Image Container */}
       <div className="relative aspect-[4/5] w-full bg-[#F4F8F6] overflow-hidden rounded-xs">
-        <Link href={href} prefetch={true} className="block w-full h-full">
+        <Link href={href} prefetch={false} className="relative block w-full h-full">
           <Image
             src={image || "/sarees/cat-pattu.jpg"}
             alt={name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            loading="eager"
-            priority={true}
+            loading="lazy"
             className="object-cover w-full h-full group-hover:scale-103 transition-transform duration-200"
           />
         </Link>
@@ -122,7 +121,7 @@ export default function ProductCardOverlay({
       {/* Details */}
       <Link
         href={href}
-        prefetch={true}
+        prefetch={false}
         className="pt-2 flex flex-col cursor-pointer group/title"
       >
         <h3 className="font-serif text-[13px] sm:text-sm font-normal text-[#1C2621] group-hover/title:text-[#0B281B] line-clamp-2 leading-snug transition-colors">

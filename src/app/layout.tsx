@@ -17,6 +17,9 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "DL Handlooms | Pure Mangalagiri Handlooms, Direct from Master Weavers",
   description: "Authentic Mangalagiri Pattu Sarees, Pure Cotton Sarees & Dress Materials direct from Dhana Lakshmi Handlooms, Bhadravathi Nagar, Mangalagiri.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -27,8 +30,27 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.addEventListener('error', function(e) {
+                if (
+                  (e && e.message && (e.message.indexOf('startTime') !== -1 || e.message.indexOf('reportAllChanges') !== -1)) ||
+                  (e && e.filename && e.filename.indexOf('web-vitals') !== -1)
+                ) {
+                  e.stopImmediatePropagation();
+                  e.preventDefault();
+                  return true;
+                }
+              }, true);
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-[#FAFAF8] text-[#1C2621]">
         {children}
         <CartDrawer />
