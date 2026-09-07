@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Heart, Search, Send } from "lucide-react";
 import { useWishlistStore } from "@/store/wishlistStore";
+import { HANDLOOM_SHIMMER_BLUR } from "@/lib/imagePlaceholders";
 
 interface ProductDetailClientSectionProps {
   product: {
@@ -48,14 +49,16 @@ export default function ProductDetailClientSection({
   return (
     <div>
       {/* Product Image Showcase */}
-      <div className="relative aspect-square w-full bg-[#F4F8F6] rounded-xs overflow-hidden border border-[#0B281B]/10 shadow-xs">
+      <div className="relative aspect-square w-full bg-[#EDE6DA] rounded-xs overflow-hidden border border-[#0B281B]/10 shadow-xs">
         <Image
           src={images[activeImageIndex] || primaryImage}
           alt={product.name}
           fill
           sizes="(max-width: 640px) 100vw, 600px"
-          className="object-cover"
+          className="object-cover transition-opacity duration-300"
           priority
+          placeholder="blur"
+          blurDataURL={HANDLOOM_SHIMMER_BLUR}
         />
 
         {/* Top-Right Floating Wishlist Button */}

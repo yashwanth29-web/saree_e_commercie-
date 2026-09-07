@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { HANDLOOM_SHIMMER_BLUR } from "@/lib/imagePlaceholders";
 
 interface CollectionItem {
   name: string;
@@ -56,6 +57,8 @@ export default function UshaCollections({ collections }: UshaCollectionsProps) {
                     alt={item.name}
                     fill
                     sizes="110px"
+                    placeholder="blur"
+                    blurDataURL={HANDLOOM_SHIMMER_BLUR}
                     className="object-cover group-hover:scale-108 transition-transform duration-300"
                   />
                 </div>

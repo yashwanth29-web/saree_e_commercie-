@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import path from 'path';
 import fs from 'fs/promises';
+import sharp from 'sharp';
 
 export async function POST(request: Request) {
   try {
@@ -17,6 +18,36 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    // Clean filename
+    const originalName = file.name || 'saree.jpg';
+    const originalExt = path.extname(originalName) || '.jpg';
+    const safeBase = path
+      .basename(originalName, originalExt)
+      .replace(/[^\w-]/g, '')
+      .slice(0, 30);
+
+    // Compress & optimize image with Sharp to high-quality WebP
+    let processedBuffer = buffer;
+    let finalExt = '.webp';
+    let mimeType = 'image/webp';
+
+    try {
+      processedBuffer = await sharp(buffer)
+        .rotate() // Auto-orient phone camera photos
+        .resize({
+          width: 1400,
+          height: 1800,
+          fit: 'inside',
+          withoutEnlargement: true,
+        })
+        .webp({ quality: 85, effort: 4 })
+        .toBuffer();
+    } catch (sharpErr) {
+      console.warn('Sharp compression fallback to original buffer:', sharpErr);
+      finalExt = originalExt;
+      mimeType = file.type || 'image/jpeg';
+    }
+
     // Ensure uploads directory exists
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
     try {
@@ -25,34 +56,28 @@ export async function POST(request: Request) {
       // ignore if already exists
     }
 
-    // Clean filename
-    const originalName = file.name || 'saree.jpg';
-    const ext = path.extname(originalName) || '.jpg';
-    const safeBase = path
-      .basename(originalName, ext)
-      .replace(/[^\w-]/g, '')
-      .slice(0, 30);
-    const fileName = `saree-${safeBase || 'photo'}-${Date.now()}${ext}`;
+    const fileName = `saree-${safeBase || 'photo'}-${Date.now()}${finalExt}`;
     const filePath = path.join(uploadsDir, fileName);
 
     try {
-      await fs.writeFile(filePath, buffer);
+      await fs.writeFile(filePath, processedBuffer);
       const publicUrl = `/uploads/${fileName}`;
       return NextResponse.json({
         success: true,
         url: publicUrl,
         fileName,
+        size: processedBuffer.length,
       });
     } catch (fsErr) {
       console.warn('Could not write to public/uploads directory, falling back to data URL:', fsErr);
       // Resilient fallback: base64 Data URL
-      const mimeType = file.type || 'image/jpeg';
-      const base64 = buffer.toString('base64');
+      const base64 = processedBuffer.toString('base64');
       const dataUrl = `data:${mimeType};base64,${base64}`;
       return NextResponse.json({
         success: true,
         url: dataUrl,
         fileName,
+        size: processedBuffer.length,
       });
     }
   } catch (error: any) {

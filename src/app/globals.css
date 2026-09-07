@@ -97,3 +97,20 @@ div[data-nextjs-indicator],
   pointer-events: none !important;
 }
 
+/* Hardware-accelerated smooth 60/120fps scrolling on mobile */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+img {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Content visibility optimization for smooth catalog scrolling */
+.product-grid-item {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px;
+}
+
+
